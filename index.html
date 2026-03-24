@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Token Calculator PRO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <h1>🚀 AI Token Calculator PRO</h1>
+  <button onclick="toggleTheme()">🌙 Toggle Theme</button>
+  <textarea id="textInput" placeholder="Paste your prompt..."></textarea>
+  <div class="stats">
+    <span id="tokens">Tokens: 0</span>
+    <span id="words">Words: 0</span>
+  </div>
+  <select id="model">
+    <option value="gpt4">GPT-4</option>
+    <option value="gpt35">GPT-3.5</option>
+  </select>
+  <input type="number" id="outputTokens" placeholder="Output tokens">
+  <div class="buttons">
+    <button onclick="calculate()">💰 Calculate Cost</button>
+    <button onclick="optimize()">🧠 Optimize Prompt</button>
+    <button onclick="saveHistory()">💾 Save</button>
+  </div>
+  <h3 id="cost"></h3>
+  <h2>📜 History</h2>
+  <ul id="history"></ul>
+  <input type="file" id="fileInput">
+</div>
+<script src="script.js"></script>
+</body>
+</html>
