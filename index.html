@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>AI Token Suite | Tokenizer, Cost Estimator & Prompt Optimizer</title>
+    <title>AI Token Calculator | Tokenizer & Cost Estimator</title>
     <!-- Tailwind CSS + Font Awesome + Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -18,158 +18,98 @@
         .gradient-text { background: linear-gradient(120deg, #1E2A5E, #2C3E66); background-clip: text; -webkit-background-clip: text; color: transparent; }
         textarea, select, input { transition: all 0.2s; }
         textarea:focus, select:focus, input:focus { ring: 2px solid #3b82f6; border-color: #3b82f6; outline: none; }
-        .badge { @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium; }
     </style>
 </head>
 <body class="antialiased p-4 md:p-6">
 
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-5xl mx-auto">
         <!-- Header Section -->
         <div class="text-center mb-8 md:mb-10">
             <h1 class="text-4xl md:text-5xl font-bold tracking-tight gradient-text">
-                <i class="fas fa-brain mr-3 text-indigo-500"></i>AI Token Suite
+                <i class="fas fa-calculator mr-3 text-indigo-500"></i>AI Token Calculator
             </h1>
-            <p class="text-gray-600 mt-2 max-w-2xl mx-auto text-lg">Precise token counting · Real‑time cost estimation · Intelligent prompt optimizer for professional workflows</p>
+            <p class="text-gray-600 mt-2 max-w-2xl mx-auto text-lg">Precise token counting · Real‑time cost estimation for GPT models</p>
             <div class="mt-3 flex flex-wrap justify-center gap-3 text-sm text-gray-500">
-                <span class="bg-white/60 px-3 py-1 rounded-full shadow-sm"><i class="fas fa-calculator mr-1"></i> GPT-4o / GPT-4 / 3.5-Turbo</span>
+                <span class="bg-white/60 px-3 py-1 rounded-full shadow-sm"><i class="fas fa-microchip mr-1"></i> GPT-4o / GPT-4 / 3.5-Turbo</span>
                 <span class="bg-white/60 px-3 py-1 rounded-full shadow-sm"><i class="fas fa-chart-line mr-1"></i> Input/Output cost breakdown</span>
-                <span class="bg-white/60 px-3 py-1 rounded-full shadow-sm"><i class="fas fa-magic mr-1"></i> Professional prompt enhancer</span>
+                <span class="bg-white/60 px-3 py-1 rounded-full shadow-sm"><i class="fas fa-dollar-sign mr-1"></i> Per‑request estimation</span>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- LEFT COLUMN: Main Prompt & Tokenizer Card (spans 2/3 on large) -->
-            <div class="lg:col-span-2 space-y-6">
-                <!-- Prompt Input Card -->
-                <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden card-hover">
-                    <div class="px-6 pt-5 pb-3 border-b border-gray-100 flex justify-between items-center flex-wrap gap-2">
-                        <div class="flex items-center space-x-2">
-                            <i class="fas fa-pen-fancy text-indigo-500 text-xl"></i>
-                            <h2 class="text-xl font-semibold text-gray-800">Your prompt</h2>
-                        </div>
-                        <div class="flex gap-2 text-sm">
-                            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full"><i class="far fa-clock mr-1"></i> Live token count</span>
-                        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Left: Prompt Input Card -->
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden card-hover">
+                <div class="px-6 pt-5 pb-3 border-b border-gray-100 flex justify-between items-center flex-wrap gap-2">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-pen-fancy text-indigo-500 text-xl"></i>
+                        <h2 class="text-xl font-semibold text-gray-800">Your prompt</h2>
                     </div>
-                    <div class="p-6">
-                        <textarea id="promptInput" rows="6" class="w-full border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-indigo-300 resize-y text-gray-700 text-sm leading-relaxed" placeholder="Paste or type your prompt here... e.g., 'Write a professional executive summary for a sustainability report.'">Compose a detailed project proposal for implementing an enterprise AI chatbot. Include key phases, risk mitigation, and ROI forecast. Tone: formal and concise.</textarea>
-                        <div class="flex justify-between mt-3 text-sm text-gray-500">
-                            <div><i class="far fa-keyboard mr-1"></i> <span id="charCount">0</span> characters</div>
-                            <div><i class="fas fa-tachometer-alt mr-1"></i> Estimated tokens: <span id="tokenCountDisplay" class="font-mono font-bold text-indigo-600">0</span> tokens</div>
-                            <button id="clearPromptBtn" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-eraser"></i> Clear</button>
-                        </div>
+                    <div class="flex gap-2 text-sm">
+                        <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full"><i class="far fa-clock mr-1"></i> Live token count</span>
                     </div>
                 </div>
-
-                <!-- Cost Estimation Card -->
-                <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                    <div class="px-6 pt-5 pb-2 border-b border-gray-100 flex items-center gap-2">
-                        <i class="fas fa-dollar-sign text-emerald-600 text-xl"></i>
-                        <h2 class="text-xl font-semibold text-gray-800">Cost estimator</h2>
-                        <span class="ml-auto text-xs bg-gray-100 px-2 py-1 rounded-full">per 1K tokens</span>
-                    </div>
-                    <div class="p-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <!-- Model Selection -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-microchip mr-1"></i> AI Model</label>
-                                <select id="modelSelect" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white transition">
-                                    <option value="gpt4o">GPT-4o (latest)</option>
-                                    <option value="gpt4">GPT-4 (Turbo)</option>
-                                    <option value="gpt35">GPT-3.5 Turbo</option>
-                                </select>
-                                <div class="text-xs text-gray-400 mt-1 flex gap-2 flex-wrap" id="rateInfo"></div>
-                            </div>
-                            <!-- Output tokens estimate -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-exchange-alt mr-1"></i> Expected output tokens</label>
-                                <div class="flex gap-3 items-center">
-                                    <input type="number" id="outputTokens" value="280" step="10" min="0" max="4000" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white">
-                                    <span class="text-gray-500 text-sm">tokens</span>
-                                </div>
-                                <p class="text-xs text-gray-400 mt-1">Estimated response length (impacts total cost)</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Cost breakdown cards -->
-                        <div class="mt-6 grid grid-cols-3 gap-3 text-center">
-                            <div class="bg-slate-50 p-3 rounded-xl">
-                                <p class="text-xs text-gray-500 uppercase">Input cost</p>
-                                <p class="text-xl font-bold text-gray-800" id="inputCostDisplay">$0.0000</p>
-                                <p class="text-xs text-gray-400" id="inputRateDetail">—</p>
-                            </div>
-                            <div class="bg-slate-50 p-3 rounded-xl">
-                                <p class="text-xs text-gray-500 uppercase">Output cost</p>
-                                <p class="text-xl font-bold text-gray-800" id="outputCostDisplay">$0.0000</p>
-                                <p class="text-xs text-gray-400" id="outputRateDetail">—</p>
-                            </div>
-                            <div class="bg-indigo-50 p-3 rounded-xl ring-1 ring-indigo-100">
-                                <p class="text-xs text-indigo-600 font-medium uppercase">Total cost</p>
-                                <p class="text-xl font-bold text-indigo-700" id="totalCostDisplay">$0.0000</p>
-                                <p class="text-xs text-gray-500">per request</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 text-xs text-gray-400 border-t pt-3 flex justify-between">
-                            <span><i class="fas fa-info-circle"></i> Input tokens = prompt tokens</span>
-                            <span>💰 Rates based on public OpenAI pricing (approx)</span>
-                        </div>
+                <div class="p-6">
+                    <textarea id="promptInput" rows="8" class="w-full border border-gray-200 rounded-xl p-4 focus:ring-2 focus:ring-indigo-300 resize-y text-gray-700 text-sm leading-relaxed" placeholder="Paste or type your prompt here... e.g., 'Write a professional executive summary for a sustainability report.'">Compose a detailed project proposal for implementing an enterprise AI chatbot. Include key phases, risk mitigation, and ROI forecast. Tone: formal and concise.</textarea>
+                    <div class="flex justify-between mt-3 text-sm text-gray-500">
+                        <div><i class="far fa-keyboard mr-1"></i> <span id="charCount">0</span> characters</div>
+                        <div><i class="fas fa-tachometer-alt mr-1"></i> Estimated tokens: <span id="tokenCountDisplay" class="font-mono font-bold text-indigo-600">0</span> tokens</div>
+                        <button id="clearPromptBtn" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-eraser"></i> Clear</button>
                     </div>
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: Prompt Optimizer + Professional insights -->
-            <div class="space-y-6">
-                <!-- Optimizer Card -->
-                <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden card-hover">
-                    <div class="bg-gradient-to-r from-indigo-50 to-white px-6 py-4 border-b border-indigo-100">
-                        <div class="flex items-center gap-2">
-                            <i class="fas fa-wand-magic text-purple-600 text-xl"></i>
-                            <h2 class="text-xl font-semibold text-gray-800">Prompt Optimizer <span class="text-xs font-normal text-gray-500">(professional edition)</span></h2>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-1">Analyze & enhance prompt clarity, tone, structure</p>
-                    </div>
-                    <div class="p-5">
-                        <!-- Suggestions panel -->
-                        <div class="mb-5">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-sm font-semibold text-gray-700"><i class="fas fa-lightbulb mr-1 text-amber-500"></i> AI suggestions</h3>
-                                <button id="refreshSuggestionsBtn" class="text-xs text-indigo-600 hover:text-indigo-800"><i class="fas fa-sync-alt"></i> Refresh</button>
-                            </div>
-                            <div id="suggestionsBox" class="mt-2 bg-gray-50 rounded-xl p-3 text-sm text-gray-600 space-y-1.5 border border-gray-200 min-h-[100px]">
-                                <i class="fas fa-spinner fa-pulse mr-1"></i> Analyzing prompt...
-                            </div>
-                        </div>
-                        
-                        <!-- Optimized Prompt Section -->
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">✨ Optimized version (professional ready)</label>
-                            <textarea id="optimizedPromptArea" rows="4" class="w-full border border-gray-200 rounded-xl p-3 text-sm bg-gray-50 resize-y text-gray-700" readonly placeholder="Click 'Generate Optimized Prompt' to see enhanced version..."></textarea>
-                        </div>
-                        
-                        <div class="flex flex-wrap gap-3">
-                            <button id="generateOptimizedBtn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-xl transition shadow-sm text-sm"><i class="fas fa-magic mr-1"></i> Generate Optimized Prompt</button>
-                            <button id="applyOptimizedBtn" class="flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2.5 rounded-xl transition text-sm"><i class="fas fa-arrow-right mr-1"></i> Apply to main</button>
-                            <button id="copyOptimizedBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 rounded-xl transition"><i class="far fa-copy"></i></button>
-                        </div>
-                        <div class="mt-3 text-center text-xs text-gray-400">
-                            <i class="fas fa-chart-simple"></i> Optimized prompt token count: <span id="optimizedTokenCount" class="font-mono font-medium">0</span> tokens
-                        </div>
-                    </div>
+            <!-- Right: Cost Estimation Card -->
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                <div class="px-6 pt-5 pb-2 border-b border-gray-100 flex items-center gap-2">
+                    <i class="fas fa-dollar-sign text-emerald-600 text-xl"></i>
+                    <h2 class="text-xl font-semibold text-gray-800">Cost estimator</h2>
+                    <span class="ml-auto text-xs bg-gray-100 px-2 py-1 rounded-full">per 1K tokens</span>
                 </div>
-
-                <!-- Quick Tips / Professional Prompting -->
-                <div class="bg-white/70 backdrop-blur-sm rounded-xl p-5 border border-indigo-100 shadow-sm">
-                    <div class="flex items-center gap-2 mb-2">
-                        <i class="fas fa-gem text-indigo-500"></i>
-                        <h3 class="font-semibold text-gray-700">Pro prompt checklist</h3>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Model Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-microchip mr-1"></i> AI Model</label>
+                            <select id="modelSelect" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white transition">
+                                <option value="gpt4o">GPT-4o (latest)</option>
+                                <option value="gpt4">GPT-4 (Turbo)</option>
+                                <option value="gpt35">GPT-3.5 Turbo</option>
+                            </select>
+                            <div class="text-xs text-gray-400 mt-1 flex gap-2 flex-wrap" id="rateInfo"></div>
+                        </div>
+                        <!-- Output tokens estimate -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-exchange-alt mr-1"></i> Expected output tokens</label>
+                            <div class="flex gap-3 items-center">
+                                <input type="number" id="outputTokens" value="280" step="10" min="0" max="4000" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white">
+                                <span class="text-gray-500 text-sm">tokens</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">Estimated response length (impacts total cost)</p>
+                        </div>
                     </div>
-                    <ul class="text-xs text-gray-600 space-y-1.5 list-disc pl-4">
-                        <li>✅ Define a clear role: “Act as a senior financial analyst...”</li>
-                        <li>✅ Specify output format: bullet points, JSON, structured report</li>
-                        <li>✅ Add constraints: length, tone, audience level</li>
-                        <li>✅ Use few-shot examples for complex tasks</li>
-                        <li>✅ Iterate: Optimizer helps you refine!</li>
-                    </ul>
+                    
+                    <!-- Cost breakdown cards -->
+                    <div class="mt-6 grid grid-cols-3 gap-3 text-center">
+                        <div class="bg-slate-50 p-3 rounded-xl">
+                            <p class="text-xs text-gray-500 uppercase">Input cost</p>
+                            <p class="text-xl font-bold text-gray-800" id="inputCostDisplay">$0.0000</p>
+                            <p class="text-xs text-gray-400" id="inputRateDetail">—</p>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-xl">
+                            <p class="text-xs text-gray-500 uppercase">Output cost</p>
+                            <p class="text-xl font-bold text-gray-800" id="outputCostDisplay">$0.0000</p>
+                            <p class="text-xs text-gray-400" id="outputRateDetail">—</p>
+                        </div>
+                        <div class="bg-indigo-50 p-3 rounded-xl ring-1 ring-indigo-100">
+                            <p class="text-xs text-indigo-600 font-medium uppercase">Total cost</p>
+                            <p class="text-xl font-bold text-indigo-700" id="totalCostDisplay">$0.0000</p>
+                            <p class="text-xs text-gray-500">per request</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-xs text-gray-400 border-t pt-3 flex justify-between">
+                        <span><i class="fas fa-info-circle"></i> Input tokens = prompt tokens</span>
+                        <span>💰 Rates based on public OpenAI pricing (approx)</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -200,16 +140,8 @@
         const inputRateDetail = document.getElementById('inputRateDetail');
         const outputRateDetail = document.getElementById('outputRateDetail');
         const clearBtn = document.getElementById('clearPromptBtn');
-        const suggestionsBox = document.getElementById('suggestionsBox');
-        const optimizedPromptArea = document.getElementById('optimizedPromptArea');
-        const generateOptimizedBtn = document.getElementById('generateOptimizedBtn');
-        const applyOptimizedBtn = document.getElementById('applyOptimizedBtn');
-        const copyOptimizedBtn = document.getElementById('copyOptimizedBtn');
-        const refreshSuggestionsBtn = document.getElementById('refreshSuggestionsBtn');
-        const optimizedTokenCountSpan = document.getElementById('optimizedTokenCount');
 
         // Tokenizer helper (use gptTokenizer library)
-        let tokenizerAvailable = false;
         function countTokens(text) {
             if (!text || text.trim() === '') return 0;
             try {
@@ -254,205 +186,36 @@
             inputCostDisplay.innerText = `$${inputCost.toFixed(6)}`;
             outputCostDisplay.innerText = `$${outputCost.toFixed(6)}`;
             totalCostDisplay.innerText = `$${total.toFixed(6)}`;
-            
-            return { inputTokens, promptText };
         }
         
-        // Professional prompt optimizer (rule-based intelligent enhancement)
-        function generateOptimizedPrompt(original) {
-            if (!original || original.trim() === "") return "Enter a prompt to optimize.";
-            let optimized = original.trim();
-            
-            // 1. Role enhancement detection
-            const hasRolePattern = /(act as|you are a|as a professional|expert|role:|senior|specialist)/i;
-            if (!hasRolePattern.test(optimized)) {
-                optimized = `Act as a professional expert in the relevant domain. ${optimized}`;
-            }
-            
-            // 2. Structure & format guidance (if missing)
-            const hasStructurePattern = /(format|structure|bullets|bullet points|json|markdown|table|section|heading)/i;
-            if (!hasStructurePattern.test(optimized)) {
-                optimized += ` Use a clear, structured format with headings or bullet points where appropriate.`;
-            }
-            
-            // 3. Tone & professionalism enhancer
-            const hasTonePattern = /(professional|formal|concise|executive|tone)/i;
-            if (!hasTonePattern.test(optimized)) {
-                optimized += ` Maintain a professional, formal, and concise tone.`;
-            }
-            
-            // 4. Add specificity & completeness for short prompts
-            if (original.split(/\s+/).length < 15) {
-                optimized += ` Provide a detailed, actionable and comprehensive answer.`;
-            }
-            
-            // 5. avoid double punctuation / clean spacing
-            optimized = optimized.replace(/\s+/g, ' ').trim();
-            // Ensure it ends with appropriate punctuation
-            if (!/[.!?]$/.test(optimized)) optimized += '.';
-            
-            return optimized;
-        }
-        
-        // Analyze prompt and return list of suggestions (professional insights)
-        function analyzePromptForSuggestions(prompt) {
-            if (!prompt || prompt.trim() === "") return ["✏️ Enter a prompt to receive optimization tips."];
-            const suggestions = [];
-            const lowerPrompt = prompt.toLowerCase();
-            
-            if (!/(act as|you are a|as a |role|expert|specialist|consultant)/i.test(prompt)) {
-                suggestions.push("🔹 <strong>Add role definition</strong>: Start with 'Act as a senior [expert]' to guide the AI.");
-            } else {
-                suggestions.push("✅ Role definition detected — good for contextual accuracy.");
-            }
-            
-            if (!/(format|structure|bullets|list|json|step by step|outline)/i.test(prompt)) {
-                suggestions.push("📐 <strong>Specify output structure</strong>: Request bullets, JSON, or sections to improve readability.");
-            } else {
-                suggestions.push("📌 Structure instruction present — helps avoid vague answers.");
-            }
-            
-            if (!/(tone|professional|formal|conversational|executive)/i.test(prompt)) {
-                suggestions.push("🎯 <strong>Define tone/style</strong>: e.g., 'Use executive summary style' for professional outputs.");
-            } else {
-                suggestions.push("🎤 Tone setting detected — ensures consistent voice.");
-            }
-            
-            if (prompt.split(/\s+/).length < 12) {
-                suggestions.push("📝 <strong>Expand context</strong>: Provide background, constraints, or examples for higher quality.");
-            } else if (prompt.split(/\s+/).length > 300) {
-                suggestions.push("⚡ <strong>Very long prompt</strong>: Consider summarizing to reduce token cost & improve focus.");
-            } else {
-                suggestions.push("🧠 Good prompt length — balances detail and cost.");
-            }
-            
-            if (!/(example|for instance|e\.g\.|like this)/i.test(prompt)) {
-                suggestions.push("💡 <strong>Add examples</strong> (few-shot) for complex tasks to improve accuracy.");
-            }
-            
-            // extra professional polish recommendation
-            if (!/(constraint|limit|max|within|specific)/i.test(prompt)) {
-                suggestions.push("🎯 Add constraints: length limit, target audience, or key points to cover.");
-            }
-            
-            if (suggestions.length === 0) suggestions.push("✨ Your prompt looks well-optimized! Use the optimizer for final polish.");
-            return suggestions;
-        }
-        
-        // update suggestions box UI
-        function updateSuggestionsUI() {
-            const prompt = promptTextarea.value;
-            const suggestionsArray = analyzePromptForSuggestions(prompt);
-            if (suggestionsArray.length) {
-                suggestionsBox.innerHTML = suggestionsArray.map(s => `<div class="flex items-start gap-2 text-sm"><i class="fas fa-circle text-[6px] mt-1.5 text-indigo-400"></i><span>${s}</span></div>`).join('');
-            } else {
-                suggestionsBox.innerHTML = `<div class="text-gray-500"><i class="fas fa-check-circle text-green-500"></i> No major improvements needed — professional ready.</div>`;
-            }
-        }
-        
-        // update optimized prompt area and its token count
-        function refreshOptimizedPreview() {
-            const original = promptTextarea.value;
-            const optimized = generateOptimizedPrompt(original);
-            optimizedPromptArea.value = optimized;
-            const optTokens = countTokens(optimized);
-            optimizedTokenCountSpan.innerText = optTokens.toLocaleString();
-        }
-        
-        // apply optimized prompt to main textarea
-        function applyOptimizedToMain() {
-            const optimizedText = optimizedPromptArea.value;
-            if (optimizedText && optimizedText.trim() !== "") {
-                promptTextarea.value = optimizedText;
-                // trigger all updates
-                updateTokenAndCost();
-                updateSuggestionsUI();
-                refreshOptimizedPreview();
-                // additional small feedback
-                const toastMsg = document.createElement('div');
-                toastMsg.innerText = '✓ Optimized prompt applied to main editor';
-                toastMsg.className = 'fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-full text-sm shadow-lg z-50';
-                document.body.appendChild(toastMsg);
-                setTimeout(() => toastMsg.remove(), 1800);
-            } else {
-                alert("No optimized prompt to apply. Generate first.");
-            }
-        }
-        
-        // copy optimized prompt
-        function copyOptimized() {
-            const optimizedText = optimizedPromptArea.value;
-            if (!optimizedText || optimizedText.trim() === "") {
-                alert("No optimized prompt to copy.");
-                return;
-            }
-            navigator.clipboard.writeText(optimizedText).then(() => {
-                const msg = document.createElement('div');
-                msg.innerText = '📋 Copied to clipboard!';
-                msg.className = 'fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-green-700 text-white px-4 py-2 rounded-full text-sm shadow-lg z-50';
-                document.body.appendChild(msg);
-                setTimeout(() => msg.remove(), 1500);
-            }).catch(() => alert("Could not copy"));
-        }
-        
-        // Event listeners + initialisation
+        // Event listeners
         function bindEvents() {
-            promptTextarea.addEventListener('input', () => {
-                updateTokenAndCost();
-                updateSuggestionsUI();
-                refreshOptimizedPreview();
-            });
-            modelSelect.addEventListener('change', () => updateTokenAndCost());
-            outputTokensInput.addEventListener('input', () => updateTokenAndCost());
+            promptTextarea.addEventListener('input', updateTokenAndCost);
+            modelSelect.addEventListener('change', updateTokenAndCost);
+            outputTokensInput.addEventListener('input', updateTokenAndCost);
             clearBtn.addEventListener('click', () => {
                 promptTextarea.value = '';
                 updateTokenAndCost();
-                updateSuggestionsUI();
-                refreshOptimizedPreview();
                 promptTextarea.focus();
             });
-            generateOptimizedBtn.addEventListener('click', () => {
-                refreshOptimizedPreview();
-                // subtle highlight
-                optimizedPromptArea.classList.add('ring-2', 'ring-indigo-300');
-                setTimeout(() => optimizedPromptArea.classList.remove('ring-2', 'ring-indigo-300'), 500);
-            });
-            applyOptimizedBtn.addEventListener('click', applyOptimizedToMain);
-            copyOptimizedBtn.addEventListener('click', copyOptimized);
-            refreshSuggestionsBtn.addEventListener('click', () => {
-                updateSuggestionsUI();
-                const flash = suggestionsBox;
-                flash.classList.add('bg-indigo-50');
-                setTimeout(() => flash.classList.remove('bg-indigo-50'), 300);
-            });
         }
         
-        // check tokenizer library ready
-        function checkTokenizerAndRun() {
-            if (typeof window.gptTokenizer !== 'undefined' && window.gptTokenizer.encode) {
-                tokenizerAvailable = true;
-                console.log("Tokenizer loaded: cl100k_base ready");
-            } else {
-                console.warn("Tokenizer library not loaded, fallback active.");
-                // Retry after small delay
-                setTimeout(() => {
-                    if (window.gptTokenizer && window.gptTokenizer.encode) {
-                        tokenizerAvailable = true;
-                        updateTokenAndCost();
-                        refreshOptimizedPreview();
-                    }
-                }, 300);
-            }
-            updateTokenAndCost();
-            updateSuggestionsUI();
-            refreshOptimizedPreview();
-        }
-        
-        // Trigger demo initial load with default prompt
+        // Initialize
         function init() {
             bindEvents();
-            checkTokenizerAndRun();
-            // Add extra format for number input
+            // Ensure tokenizer is loaded (or fallback)
+            if (typeof window.gptTokenizer !== 'undefined' && window.gptTokenizer.encode) {
+                console.log("Tokenizer loaded: cl100k_base ready");
+            } else {
+                console.warn("Tokenizer library not loaded, using fallback.");
+                setTimeout(() => {
+                    if (window.gptTokenizer && window.gptTokenizer.encode) {
+                        updateTokenAndCost();
+                    }
+                }, 200);
+            }
+            updateTokenAndCost();
+            // Additional validation for output tokens input
             outputTokensInput.addEventListener('change', () => {
                 let val = parseInt(outputTokensInput.value, 10);
                 if (isNaN(val)) val = 200;
@@ -461,11 +224,6 @@
                 outputTokensInput.value = val;
                 updateTokenAndCost();
             });
-            // manual first suggestion refresh
-            setTimeout(() => {
-                updateSuggestionsUI();
-                refreshOptimizedPreview();
-            }, 50);
         }
         
         init();
